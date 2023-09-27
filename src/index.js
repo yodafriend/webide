@@ -5,9 +5,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import AdminPage from './pages/AdminPage';
 import IdePage from './pages/IdePage';
-
-import reportWebVitals from './reportWebVitals';
 import ErrorPage from './pages/ErrorPage';
+import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/ProfilePage';
+import SignupPage from './pages/SignupPage';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,18 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <AdminPage />,
   },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/profile',
+    element: <ProfilePage />,
+  },
+  {
+    path: '/signup',
+    element: <SignupPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -31,8 +44,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <RouterProvider router={router} />
   </>,
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
