@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
-export default function App() {
+export default function Forgot() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -87,7 +87,7 @@ export default function App() {
         </Dialog>
       </header>
 
-      <div tw="relative isolate px-6 pt-14 lg:px-8">
+      <div tw="relative isolate px-6 pt-10 lg:px-8">
         <div
           tw="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
           aria-hidden="true"
@@ -100,24 +100,48 @@ export default function App() {
             }}
           />
         </div>
-        <div tw="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+        <div tw="mx-auto max-w-2xl py-12 sm:py-12 lg:py-48">
           <div tw="text-center">
-            <h1 tw="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Make your Code
+            <h1 tw="text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">
+              비밀번호 재설정
             </h1>
-            <p tw="mt-6 text-lg leading-8 text-gray-600">
-              깔끔한 코드 작성을 도와주는 Web IDE
+            <p tw="mt-6 text-base leading-8 text-gray-600">
+              비밀번호 재설정 링크를 이메일로 보내드립니다.
             </p>
-            <div tw="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="/login"
-                tw="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Get started
-              </a>
-            </div>
+          </div>
+          <div tw="pt-8 sm:mx-auto sm:w-full sm:max-w-sm">
+            <form tw="space-y-4" action="#" method="POST">
+              <div>
+                <label
+                  htmlFor="email"
+                  tw="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Email address
+                  <div tw="mt-2">
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      tw="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </label>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  tw="flex w-full justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+                >
+                  리셋하기
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+
         <div
           tw="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
           aria-hidden="true"
