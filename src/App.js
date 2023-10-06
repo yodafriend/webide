@@ -1,11 +1,37 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import useAuthStore from './stores/authStore';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const { isLoggedIn, logout } = useAuthStore();
+
+  const fetchProjects = async (memberId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8800/api/v1/projects/${memberId}`,
+      );
+      if (response.status === 200) {
+        const projectList = response.data;
+        setProjects(projectList);
+      } else {
+        console.error('API 요청 실패');
+      }
+    } catch (error) {
+      console.error('API 요청 오류:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchProjects();
+    }
+  }, [isLoggedIn]);
 
   return (
     <div tw="bg-white">
@@ -30,18 +56,32 @@ export default function App() {
               <Bars3Icon tw="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
-
-          <div tw="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
-              href="/signup"
-              tw="text-sm font-semibold leading-6 text-gray-900 mr-5"
-            >
-              Sign Up
-            </a>
-            <a href="/login" tw="text-sm font-semibold leading-6 text-gray-900">
-              Log in
-            </a>
-          </div>
+          {isLoggedIn ? (
+            <div tw="hidden lg:flex lg:flex-1 lg:justify-end">
+              <button
+                type="button"
+                onClick={logout}
+                tw="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Log out
+              </button>
+            </div>
+          ) : (
+            <div tw="hidden lg:flex lg:flex-1 lg:justify-end">
+              <a
+                href="/signup"
+                tw="text-sm font-semibold leading-6 text-gray-900 mr-5"
+              >
+                Sign Up
+              </a>
+              <a
+                href="/login"
+                tw="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Log in
+              </a>
+            </div>
+          )}
         </nav>
         <Dialog
           as="div"
@@ -69,13 +109,13 @@ export default function App() {
               <div tw="-my-6 divide-y divide-gray-500/10">
                 <div tw="py-6">
                   <a
-                    href="/login"
+                    href="/signup"
                     tw="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Sing Up
                   </a>
                   <a
-                    href="/signup"
+                    href="/login"
                     tw="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Log in
@@ -100,24 +140,30 @@ export default function App() {
             }}
           />
         </div>
-        <div tw="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-          <div tw="text-center">
-            <h1 tw="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Make your Code
-            </h1>
-            <p tw="mt-6 text-lg leading-8 text-gray-600">
-              깔끔한 코드 작성을 도와주는 Web IDE
-            </p>
-            <div tw="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="/login"
-                tw="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Get started
-              </a>
+        {/* main 내용 위치 */}
+        {isLoggedIn ? (
+          <div>{projects}</div>
+        ) : (
+          <div tw="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            <div tw="text-center">
+              <h1 tw="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                Make your Code
+              </h1>
+              <p tw="mt-6 text-lg leading-8 text-gray-600">
+                깔끔한 코드 작성을 도와주는 Web IDE
+              </p>
+              <div tw="mt-10 flex items-center justify-center gap-x-6">
+                <a
+                  href="/login"
+                  tw="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Get started
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
         <div
           tw="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
           aria-hidden="true"
