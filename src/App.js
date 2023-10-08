@@ -1,13 +1,20 @@
 /** @jsxImportSource @emotion/react */
+/* eslint-disable */
 import 'twin.macro';
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import useAuthStore from './auth/authStore';
+import { AuthProvider } from './auth/AuthContext';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const isAuthenticated = useAuthStore((state)=>state.isAuthenticated);
+  const logout = useAuthStore((state)=>state.logout);
+  const email = useAuthStore((state) => state.email);
+  const username = email.split('@')[0];
   return (
+    <AuthProvider>
     <div tw="bg-white">
       <header tw="absolute inset-x-0 top-0 z-50">
         <nav
@@ -32,16 +39,26 @@ export default function App() {
           </div>
 
           <div tw="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
-              href="/signup"
-              tw="text-sm font-semibold leading-6 text-gray-900 mr-5"
-            >
-              Sign Up
-            </a>
-            <a href="/login" tw="text-sm font-semibold leading-6 text-gray-900">
-              Log in
-            </a>
-          </div>
+          {isAuthenticated ? (
+            <>
+              <span tw="text-sm font-semibold leading-6 text-gray-900 mr-5">
+                {username}님 환영합니다!
+              </span>
+              <button onClick={logout} tw="text-sm font-semibold leading-6 text-gray-900">
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              <a href="/signup" tw="text-sm font-semibold leading-6 text-gray-900 mr-5">
+                Sign Up
+              </a>
+              <a href="/login" tw="text-sm font-semibold leading-6 text-gray-900">
+                Log in
+              </a>
+            </>
+          )}
+        </div>
         </nav>
         <Dialog
           as="div"
@@ -66,23 +83,30 @@ export default function App() {
               </button>
             </div>
             <div tw="mt-6 flow-root">
-              <div tw="-my-6 divide-y divide-gray-500/10">
-                <div tw="py-6">
-                  <a
-                    href="/login"
-                    tw="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Sing Up
-                  </a>
-                  <a
-                    href="/signup"
-                    tw="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
+          <div tw="-my-6 divide-y divide-gray-500/10">
+            <div tw="py-6">
+              {isAuthenticated ? (
+                <>
+                  <span tw="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900">
+                    {username}님 환영합니다!
+                  </span>
+                  <button onClick={logout} tw="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-red-600 hover:bg-gray-50">
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <a href="/login" tw="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                     Log in
                   </a>
-                </div>
-              </div>
+                  <a href="/signup" tw="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                    Sign up
+                  </a>
+                </>
+              )}
             </div>
+          </div>
+        </div>
           </Dialog.Panel>
         </Dialog>
       </header>
@@ -110,7 +134,7 @@ export default function App() {
             </p>
             <div tw="mt-10 flex items-center justify-center gap-x-6">
               <a
-                href="/login"
+                href="/ide"
                 tw="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Get started
@@ -132,5 +156,6 @@ export default function App() {
         </div>
       </div>
     </div>
+    </AuthProvider>
   );
 }
