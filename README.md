@@ -105,7 +105,7 @@
    ```sh
    git clone https://github.com/OurRealRoad/web-ide-frontend.git
    ```
-2. husky 실행 - 코드 관리와 커밋 메시지 관리를 할 때 사용하는 라이브러리
+2. module 설치 및 husky 실행
    ```sh
    npm install
    ```
