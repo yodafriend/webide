@@ -1,55 +1,57 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro';
-import {useEffect} from "react";
-import axios from "axios";
+import { useEffect } from 'react';
+import axios from 'axios';
 
 export default function AdminPage() {
   useEffect(() => {
     axios
-        .get('http://localhost:8080/api/v1/auth/csrf')
-        .then((response) => {
-          console.log(response);
-          if (response.data) {
-            window.sessionStorage.setItem(response.config.xsrfCookieName, response.data);
-            axios.defaults.headers.common[response.config.xsrfHeaderName] = response.data;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Failed to fetch CSRF token');
-        });
+      .get('http://localhost:8080/api/v1/auth/csrf')
+      .then((response) => {
+        console.log(response);
+        if (response.data) {
+          window.sessionStorage.setItem(
+            response.config.xsrfCookieName,
+            response.data,
+          );
+          axios.defaults.headers.common[response.config.xsrfHeaderName] =
+            response.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        alert('Failed to fetch CSRF token');
+      });
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/auth/register',
-          {
-            "email":document.getElementById('email').value,
-            "name":document.getElementById('name').value,
-            "password":document.getElementById('password').value,
-            "picture":"https://picture.somewhere"
+      const response = await axios.post(
+        'http://localhost:8080/api/v1/auth/register',
+        {
+          email: document.getElementById('email').value,
+          name: document.getElementById('name').value,
+          password: document.getElementById('password').value,
+          picture: 'https://picture.somewhere',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
           },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          }
+          withCredentials: true,
+        },
       );
 
-      if(response){
+      if (response) {
         alert('회원가입 완료됐습니다!');
-				
       }
     } catch (error) {
       alert('Registration failed.');
-      console.log(error.response.data.message)
+      console.log(error.response.data.message);
     }
   };
-
-
 
   return (
     <div tw="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -64,7 +66,7 @@ export default function AdminPage() {
       </div>
 
       <div tw="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form tw="space-y-4" onSubmit={handleSubmit} >
+        <form tw="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="email"
@@ -163,4 +165,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
