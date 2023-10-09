@@ -17,11 +17,13 @@ export default function LoginPage() {
     axios
         .get('http://localhost:8080/api/v1/auth/csrf')
         .then((response) => {
-            console.log(response);
+            console.log("api response",response);
             if (response.data) {
                 window.sessionStorage.setItem(response.config.xsrfCookieName, response.data);
                 axios.defaults.headers.common[response.config.xsrfHeaderName] = response.data;
-            }
+
+                useAuthStore.setState({csrfToken: response.data})
+              }
             console.log(response.data)
         })
         .catch((error) => {
@@ -29,6 +31,7 @@ export default function LoginPage() {
             alert('Failed to fetch CSRF token');
         });
 }, []);
+
   const handleChange = (e) => {
     setCredentials({
       ...credentials,
@@ -43,7 +46,6 @@ export default function LoginPage() {
       const { token} = response.data;
       login(token,credentials.email);
       console.log(token,login)
-      console.log(credentials.email)
       alert("로그인 되었습니다.");
       router('/');
     } catch (error) {

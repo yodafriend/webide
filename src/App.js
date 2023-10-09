@@ -13,6 +13,8 @@ export default function App() {
   const logout = useAuthStore((state)=>state.logout);
   const email = useAuthStore((state) => state.email);
   const username = email.split('@')[0];
+  const {csrfToken} = useAuthStore();
+  console.log(csrfToken)
   return (
     <AuthProvider>
     <div tw="bg-white">

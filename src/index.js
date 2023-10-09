@@ -67,9 +67,7 @@ const router = createBrowserRouter([
   {
     path: '/forgot',
     element: (
-      <ProtectedRoute>
         <Forgot />
-      </ProtectedRoute>
     ),
   },
 ]);
