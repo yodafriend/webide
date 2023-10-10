@@ -16,12 +16,7 @@ import ChatPage from './pages/ChatPage/Chat';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/ide',
+    path: 'ide/:projectId',
     element: (
       <ProtectedRoute>
         <IdePage />
@@ -29,7 +24,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/admin',
+    path: 'admin',
     element: (
       <ProtectedRoute>
         <AdminPage />
@@ -63,6 +58,11 @@ const router = createBrowserRouter([
   {
     path: '/forgot',
     element: <Forgot />,
+  },
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById('root')).render(

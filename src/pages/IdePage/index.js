@@ -1,8 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+
+import useAuthStore from '../../auth/authStore';
 import WebTerminal from '../../lib/WebTerminal';
 // import useAuthStore from '../../auth/authStore';
 
@@ -25,6 +30,60 @@ const userNavigation = [
 ];
 
 export default function IdePage() {
+  const { projectId } = useParams();
+  const { token } = useAuthStore();
+
+  useEffect(() => {
+    const startProject = async () => {
+      try {
+        const response = await axios.post(
+          `http://localhost:8080/api/v1/${projectId}/run`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Bearer 토큰 방식을 사용합니다.
+            },
+          },
+        );
+        console.log('Success:', response.data); // 성공 시 응답 데이터를 콘솔에 출력합니다.
+      } catch (error) {
+        console.error('Error:', error); // 오류 발생 시 콘솔에 오류를 출력합니다.
+        if (error.response) {
+          // 서버로부터 응답이 있었다면 응답 내용을 출력합니다.
+          console.error('Response data:', error.response.data);
+          console.error('Response status:', error.response.status);
+        }
+      }
+    };
+
+    startProject(); // fetchData 함수를 호출합니다.
+
+    return () => {
+      const stopProject = async () => {
+        try {
+          const response = await axios.post(
+            `http://localhost:8080/api/v1/${projectId}/stop`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Bearer 토큰 방식을 사용합니다.
+                'Content-Type': 'application/json',
+              },
+            },
+          );
+          console.log('Success:', response.data); // 성공 시 응답 데이터를 콘솔에 출력합니다.
+        } catch (error) {
+          console.error('Error:', error); // 오류 발생 시 콘솔에 오류를 출력합니다.
+          if (error.response) {
+            // 서버로부터 응답이 있었다면 응답 내용을 출력합니다.
+            console.error('Response data:', error.response.data);
+            console.error('Response status:', error.response.status);
+          }
+        }
+      };
+      stopProject();
+      console.log('stop project');
+    };
+  }, [projectId]);
+
   return (
     <div tw="min-h-full">
       <Disclosure as="nav" tw="bg-sky-700">
@@ -35,7 +94,7 @@ export default function IdePage() {
                 <div tw="flex items-center">
                   <div tw="flex-shrink-0">
                     <a href="/">
-                      <img tw="h-8 w-8" src="logo.png" alt="Your Company" />
+                      <img tw="h-8 w-8" src="../logo.png" alt="Your Company" />
                     </a>
                   </div>
                   <div tw="hidden md:block">

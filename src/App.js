@@ -7,12 +7,12 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import useAuthStore from './auth/authStore';
 import { AuthProvider } from './auth/AuthContext';
 import axios from 'axios';
+import ProjectList from './component/ProjectList';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { email, logout, isAuthenticated } = useAuthStore();
-  console.log(isAuthenticated);
-  const [projects, setProjects] = useState([]);
+  console.log('isAuthenticated : ', isAuthenticated);
   const username = email.split('@')[0];
 
   useEffect(() => {
@@ -168,12 +168,10 @@ export default function App() {
           // 로그인 되어 있을 때 화면
           <div tw="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
             <div tw="text-center">
-              <h1 tw="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <h1 tw="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
                 프로젝트 목록
               </h1>
-              <p tw="mt-6 text-lg leading-8 text-gray-600">
-                깔끔한 코드 작성을 도와주는 Web IDE
-              </p>
+              <ProjectList />
             </div>
           </div>
         ) : (
@@ -188,7 +186,7 @@ export default function App() {
               </p>
               <div tw="mt-10 flex items-center justify-center gap-x-6">
                 <a
-                  href="/ide"
+                  href="/signup"
                   tw="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Get started
