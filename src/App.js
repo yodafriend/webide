@@ -12,14 +12,12 @@ import ProjectList from './component/ProjectList';
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { email, logout, isAuthenticated } = useAuthStore();
-  console.log('isAuthenticated : ', isAuthenticated);
   const username = email.split('@')[0];
 
   useEffect(() => {
     axios
       .get('http://localhost:8080/api/v1/auth/csrf')
       .then((response) => {
-        console.log(response);
         if (response.data) {
           window.sessionStorage.setItem(
             response.config.xsrfCookieName,
@@ -30,7 +28,6 @@ export default function App() {
         }
       })
       .catch((error) => {
-        console.log(error);
         alert('Failed to fetch CSRF token');
       });
   }, []);

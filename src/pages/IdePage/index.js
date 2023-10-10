@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro';
-import { Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -32,18 +32,23 @@ const userNavigation = [
 export default function IdePage() {
   const { projectId } = useParams();
   const { token } = useAuthStore();
+  const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     const startProject = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:8080/api/v1/${projectId}/run`,
+          `http://localhost:8080/api/v1/projects/${projectId}/run`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${token}`, // Bearer 토큰 방식을 사용합니다.
             },
           },
         );
+        if (response.data === 'ok') {
+          setIsRunning(true);
+        }
         console.log('Success:', response.data); // 성공 시 응답 데이터를 콘솔에 출력합니다.
       } catch (error) {
         console.error('Error:', error); // 오류 발생 시 콘솔에 오류를 출력합니다.
@@ -57,31 +62,32 @@ export default function IdePage() {
 
     startProject(); // fetchData 함수를 호출합니다.
 
-    return () => {
-      const stopProject = async () => {
-        try {
-          const response = await axios.post(
-            `http://localhost:8080/api/v1/${projectId}/stop`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`, // Bearer 토큰 방식을 사용합니다.
-                'Content-Type': 'application/json',
-              },
-            },
-          );
-          console.log('Success:', response.data); // 성공 시 응답 데이터를 콘솔에 출력합니다.
-        } catch (error) {
-          console.error('Error:', error); // 오류 발생 시 콘솔에 오류를 출력합니다.
-          if (error.response) {
-            // 서버로부터 응답이 있었다면 응답 내용을 출력합니다.
-            console.error('Response data:', error.response.data);
-            console.error('Response status:', error.response.status);
-          }
-        }
-      };
-      stopProject();
-      console.log('stop project');
-    };
+    // return () => {
+    //   const stopProject = async () => {
+    //     try {
+    //       const response = await axios.post(
+    //         `http://localhost:8080/api/v1/projects/${projectId}/stop`,
+    //         {},
+    //         {
+    //           headers: {
+    //             Authorization: `Bearer ${token}`, // Bearer 토큰 방식을 사용합니다.
+    //             'Content-Type': 'application/json',
+    //           },
+    //         },
+    //       );
+    //       console.log('Success:', response.data); // 성공 시 응답 데이터를 콘솔에 출력합니다.
+    //     } catch (error) {
+    //       console.error('Error:', error); // 오류 발생 시 콘솔에 오류를 출력합니다.
+    //       if (error.response) {
+    //         // 서버로부터 응답이 있었다면 응답 내용을 출력합니다.
+    //         console.error('Response data:', error.response.data);
+    //         console.error('Response status:', error.response.status);
+    //       }
+    //     }
+    //   };
+    //   stopProject();
+    //   console.log('stop project');
+    // };
   }, [projectId]);
 
   return (
@@ -277,7 +283,7 @@ export default function IdePage() {
       </header>
       <main>
         <div tw="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-          <WebTerminal />
+          {isRunning && <WebTerminal projectId={projectId} />}
         </div>
       </main>
     </div>

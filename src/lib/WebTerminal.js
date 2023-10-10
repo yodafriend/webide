@@ -6,8 +6,9 @@ import { useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import useAuthStore from '../auth/authStore';
 
-function WebTerminal() {
+function WebTerminal(props) {
   const { token } = useAuthStore();
+  const { projectId } = props;
   const terminalRef = useRef(null);
   const terminal = new Terminal();
 
@@ -21,9 +22,7 @@ function WebTerminal() {
     terminal.open(terminalRef.current);
 
     socket.onopen = () => {
-      socket.send(
-        JSON.stringify({ projectId: 'd6811229-fd5f-4d69-ade8-98b64e33db2d' }),
-      );
+      socket.send(JSON.stringify({ projectId: `${projectId}` }));
       socket.send('\n');
     };
 
