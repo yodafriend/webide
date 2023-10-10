@@ -16,5 +16,6 @@ module.exports = {
     'react/no-unknown-property': ['error', { ignore: ['tw'] }],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     "import/no-unresolved": "off",
+    "react/no-array-index-key": "off",
   },
 };
