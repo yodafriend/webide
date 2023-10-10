@@ -3,6 +3,8 @@ import 'twin.macro';
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import WebTerminal from '../../lib/WebTerminal';
+// import useAuthStore from '../../auth/authStore';
 
 const user = {
   name: 'Tom Cook',
@@ -19,8 +21,7 @@ const navigation = [
 ];
 const userNavigation = [
   { name: '프로필', href: '/profile' },
-  { name: '설정', href: '#' },
-  { name: '로그아웃', href: '#' },
+  { name: '로그아웃', href: '/#' },
 ];
 
 export default function IdePage() {
@@ -217,7 +218,7 @@ export default function IdePage() {
       </header>
       <main>
         <div tw="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-          {/* Your content */}
+          <WebTerminal />
         </div>
       </main>
     </div>
