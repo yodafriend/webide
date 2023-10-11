@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import useAuthStore from './auth/authStore';
-import { AuthProvider } from './auth/AuthContext';
 import axios from 'axios';
 import ProjectList from './components/ProjectList';
 
@@ -164,8 +163,8 @@ export default function App() {
         {isAuthenticated ? (
           // 로그인 되어 있을 때 화면
           <div tw="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-            <div tw="text-center">
-              <h1 tw="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            <div tw="text-center justify-center">
+              <h1 tw="text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 프로젝트 목록
               </h1>
               <ProjectList />
