@@ -1,60 +1,42 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro';
-import React, { useState ,useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import useAuthStore from '../../auth/authStore';
 
 export default function LoginPage() {
   const router = useNavigate();
-  const login = useAuthStore((state)=>state.login);
+  const login = useAuthStore((state) => state.login);
   const [credentials, setCredentials] = useState({
     email: '',
-    password: ''
+    password: '',
   });
-
-  useEffect(() => {
-    axios
-        .get('http://localhost:8080/api/v1/auth/csrf')
-        .then((response) => {
-            console.log("api response",response);
-            if (response.data) {
-                window.sessionStorage.setItem(response.config.xsrfCookieName, response.data);
-                axios.defaults.headers.common[response.config.xsrfHeaderName] = response.data;
-
-                useAuthStore.setState({csrfToken: response.data})
-              }
-            console.log(response.data)
-        })
-        .catch((error) => {
-            console.log(error);
-            alert('Failed to fetch CSRF token');
-        });
-}, []);
 
   const handleChange = (e) => {
     setCredentials({
       ...credentials,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/auth/authenticate', credentials );
-      const { token} = response.data;
-      login(token,credentials.email);
-      console.log(token,login)
-      alert("로그인 되었습니다.");
+      const response = await axios.post(
+        'http://localhost:8080/api/v1/auth/authenticate',
+        credentials,
+      );
+      const { token } = response.data;
+      login(token, credentials.email);
+      alert('로그인 되었습니다.');
       router('/');
     } catch (error) {
-      alert("이메일 및 비밀번호 오류")
+      alert('이메일 및 비밀번호 오류');
     }
   };
 
-
-    return (
+  return (
     <div tw="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div tw="sm:mx-auto sm:w-full sm:max-w-sm">
         <a href="/">

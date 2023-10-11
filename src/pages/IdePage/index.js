@@ -8,7 +8,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import useAuthStore from '../../auth/authStore';
-import WebTerminal from '../../lib/WebTerminal';
+import WebTerminal from '../../component/WebTerminal';
 // import useAuthStore from '../../auth/authStore';
 
 const user = {

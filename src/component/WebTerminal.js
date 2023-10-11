@@ -2,13 +2,13 @@
 import 'twin.macro';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
+import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import useAuthStore from '../auth/authStore';
 
-function WebTerminal(props) {
+function WebTerminal({ projectId }) {
   const { token } = useAuthStore();
-  const { projectId } = props;
   const terminalRef = useRef(null);
   const terminal = new Terminal();
 
@@ -122,5 +122,9 @@ function WebTerminal(props) {
 
   return <div ref={terminalRef} tw="h-64 bg-black text-white" />;
 }
+
+WebTerminal.propTypes = {
+  projectId: PropTypes.string.isRequired,
+};
 
 export default WebTerminal;
