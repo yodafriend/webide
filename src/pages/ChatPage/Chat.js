@@ -9,11 +9,12 @@ import CreateRoom from './CreateRoom';
 let stompClient = "";
 
 function ChatPage() {
-    const {token}=useAuthStore();
+    const {token ,projectId}=useAuthStore();
     const email = useAuthStore((state) => state.email);
     const username = email.split('@')[0];
     const [messages, setMessages] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
+    console.log(projectId)
     const [room, setRoom] = useState({
         projectId: '',
         roomId: '',
@@ -29,19 +30,21 @@ function ChatPage() {
         console.log('connected with room id :', room.roomId);
 
         stompClient.subscribe(`/sub/chat/room/${room.roomId}`, (message) => {
-            console.log('received', message);
             setMessages((prev) => {
                 const updatedMessages = [...prev, JSON.parse(message.body)];
                 console.log('Updated messages:', updatedMessages);
                 return updatedMessages;
             });
-        });
+        },[]);
 
         stompClient.subscribe('/api/v1/chat/chatlist', (message) => {
+            const parsedMessage = JSON.parse(message.body);
+            console.log("received chat list update:",parsedMessage)
             console.log('chat list', message);
             setMessages((prev) => [...prev, JSON.parse(message.body)]);
         });
     };
+    
 
     const onError = (error) => {
         console.log({ error });
@@ -136,17 +139,17 @@ function ChatPage() {
             <div tw="flex flex-wrap -mx-4" onSubmit={e => e.preventDefault()}>
                 <div tw="w-1/2 px-4">
                 <form tw="flex items-center" onSubmit={e => e.preventDefault()}>
-                        <button type="button" id="connect" tw="bg-gray-300 hover:bg-green-500 px-2 py-1 mr-2" onClick={handleConnect}>Connect</button>
-                        <button type="button" id="disconnect" tw="bg-gray-300 hover:bg-red-500 px-2 py-1" disabled={!stompClient} onClick={handleDisconnect}>Disconnect</button>
+                        <button type="button" id="connect" tw="bg-sky-200 hover:bg-green-500 px-2 py-1 mr-2 rounded-lg" onClick={handleConnect}>Connect</button>
+                        <button type="button" id="disconnect" tw="bg-sky-200 hover:bg-red-500 px-2 py-1 rounded-lg" disabled={!stompClient} onClick={handleDisconnect}>Disconnect</button>
                     </form>
                 </div>
                 <div tw="flex">
-                <div tw="w-1/3 px-4 mr-auto">
+                <div tw="w-3/5 px-4 mr-auto">
                     <form tw="flex items-center mb-4" onSubmit={e => e.preventDefault()}>
                         <input type="text" id="name" tw="px-2 py-1 border rounded mr-2" placeholder="이름" value={username} readOnly />
-                        <input type="text" id="roomId" tw="px-2 py-1 border rounded mr-2" placeholder="채팅방id" name="roomId" value={room.roomId} onChange={handleRoomDataChange} />
-                        <input type="text" id="projectId" tw="px-2 py-1 border rounded mr-2" placeholder="프로젝트 uuid" name="projectId" value={room.projectId} onChange={handleRoomDataChange} />
-                        <button id="Entrance" type="button" tw="bg-gray-300 hover:bg-gray-400 w-16 h-16" onClick={handleJoinRoom}>입장</button>
+                        <input type="text" id="roomId" tw="px-2 py-1 border rounded mr-2" placeholder="roomid" name="roomId" value={room.roomId} onChange={handleRoomDataChange} />
+                        <input type="text" id="projectId" tw="px-2 py-1 border rounded mr-2" placeholder="프로젝트id" name="projectId" value={room.projectId} onChange={handleRoomDataChange} />
+                        <button id="Entrance" type="button" tw="px-4 bg-sky-200 hover:bg-gray-400 h-16 text-center" onClick={handleJoinRoom}>입장</button>                    
                     </form>
                 </div>
                 </div>

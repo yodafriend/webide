@@ -10,10 +10,10 @@ import axios from 'axios';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { email, logout, isAuthenticated } = useAuthStore();
+  const { email, logout, isAuthenticated ,projectId } = useAuthStore();
   const [projects, setProjects] = useState([]);
   const username = email.split('@')[0];
-
+  console.log(projectId)
   useEffect(() => {
     axios
       .get('http://localhost:8080/api/v1/auth/csrf')
@@ -35,7 +35,6 @@ export default function App() {
   }, []);
 
   return (
-    <AuthProvider>
       <div tw="bg-white">
         <header tw="absolute inset-x-0 top-0 z-50">
           <nav
@@ -212,6 +211,5 @@ export default function App() {
           </div>
         </div>
       </div>
-    </AuthProvider>
   );
 }
