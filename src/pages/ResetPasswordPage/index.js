@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
-
 export default function Forgot() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useNavigate();
@@ -16,24 +15,27 @@ export default function Forgot() {
   const [newPassword, setNewPassword] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
   const handleResetPassword = async () => {
-      try {            
-        const response = await axios.post('http://localhost:8080/api/v1/auth/reset-password', {
-              email,
-              name,
-              newpassword: newPassword
-          });
-          const { token } = response.data;
-          if (response.data.accepted) {
-              setResponseMessage('비밀번호가 성공적으로 변경되었습니다.');
-              router('/login');
-          } else {
-              setResponseMessage(token); // "Not authenticated"
-          }
-        } catch (error) {
-            setResponseMessage('오류가 발생했습니다. 다시 시도해주세요.');
-        }
-        
-    };
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/v1/auth/reset-password',
+        {
+          email,
+          name,
+          newpassword: newPassword,
+        },
+      );
+      const { data } = response.data;
+      console.log(data);
+      if (response.data.accepted) {
+        setResponseMessage('비밀번호가 성공적으로 변경되었습니다.');
+        router('/login');
+      } else {
+        setResponseMessage(data); // "Not authenticated"
+      }
+    } catch (error) {
+      setResponseMessage('오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  };
   return (
     <div tw="bg-white">
       <header tw="absolute inset-x-0 top-0 z-50">
@@ -132,9 +134,6 @@ export default function Forgot() {
             <h1 tw="text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               비밀번호 재설정
             </h1>
-            <p tw="mt-6 text-base leading-8 text-gray-600">
-              비밀번호 재설정 링크를 이메일로 보내드립니다.
-            </p>
           </div>
           <div tw="pt-8 sm:mx-auto sm:w-full sm:max-w-sm">
             <form tw="space-y-4" action="#" method="POST">
@@ -150,7 +149,7 @@ export default function Forgot() {
                       name="email"
                       type="email"
                       autoComplete="email"
-                      onChange={(e)=>setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                       tw="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                     />
@@ -169,9 +168,9 @@ export default function Forgot() {
                       id="name"
                       name="name"
                       type="text"
-                      placeholder='이름'
+                      placeholder="이름"
                       autoComplete="name"
-                      onChange={(e)=>(setName(e.target.value))}
+                      onChange={(e) => setName(e.target.value)}
                       required
                       tw="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                     />
@@ -188,17 +187,16 @@ export default function Forgot() {
                     <input
                       id="password"
                       name="password"
-                      placeholder='새 비밀번호'
+                      placeholder="새 비밀번호"
                       type="password"
                       value={newPassword}
                       autoComplete="password"
-                      onChange={(e)=>setNewPassword(e.target.value)}
+                      onChange={(e) => setNewPassword(e.target.value)}
                       required
                       tw="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </label>
-                
               </div>
               <div>
                 <button

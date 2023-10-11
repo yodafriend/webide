@@ -12,16 +12,10 @@ import SignupPage from './pages/SignupPage';
 import Forgot from './pages/ResetPasswordPage';
 import ProtectedRoute from './Route/ProtectedRoute';
 import { AuthProvider } from './auth/AuthContext';
-import ChatPage from './pages/ChatPage/Chat';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/ide',
+    path: 'ide/:projectId',
     element: (
       <ProtectedRoute>
         <IdePage />
@@ -29,7 +23,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/admin',
+    path: 'admin',
     element: (
       <ProtectedRoute>
         <AdminPage />
@@ -49,20 +43,17 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/chat',
-    element: (
-      <ProtectedRoute>
-        <ChatPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
     path: '/signup',
     element: <SignupPage />,
   },
   {
     path: '/forgot',
     element: <Forgot />,
+  },
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById('root')).render(

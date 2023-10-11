@@ -27,6 +27,8 @@
     "twin.macro": "^3.4.0",
     "web-vitals": "^2.1.4",
     "ws": "^8.14.2",
+    "xterm": "^5.3.0",
+    "xterm-addon-attach": "^0.9.0",
     "zustand": "^4.4.3"
   },
   "scripts": {

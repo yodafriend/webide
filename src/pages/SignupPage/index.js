@@ -49,26 +49,6 @@ function Register() {
     setErrMsg('');
   }, [email, pw, matchpw]);
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/api/v1/auth/csrf')
-      .then((response) => {
-        console.log(response);
-        if (response.data) {
-          window.sessionStorage.setItem(
-            response.config.xsrfCookieName,
-            response.data,
-          );
-          axios.defaults.headers.common[response.config.xsrfHeaderName] =
-            response.data;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        alert('Failed to fetch CSRF token');
-      });
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const v1 = EMAIL_REGEX.test(email);
@@ -94,9 +74,9 @@ function Register() {
           withCredentials: true,
         },
       );
-      console.log('data:', response.data);
-      console.log('response:', response.data.token);
-      console.log(JSON.stringify(response));
+      if (response.status === 200 && response.data.accepted === true) {
+        alert('회원가입 성공');
+      }
 
       setEmail('');
       setpw('');
@@ -112,7 +92,6 @@ function Register() {
       errRef.current.focus();
     }
     router('/login');
-    alert('Success');
   };
 
   // 유효한 email을 작성했을 때 이미 가입된 이메일인지 확인
@@ -128,12 +107,11 @@ function Register() {
           },
         })
         .then((response) => {
-          console.log(response);
           setErrMsg(response.data.message);
           setValidEmail(response.data.result);
         })
         .catch((error) => {
-          console.log(error);
+          alert(error);
         });
     }
   };
