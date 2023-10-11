@@ -5,9 +5,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import useAuthStore from '../../auth/authStore';
 
+
 export default function LoginPage() {
   const router = useNavigate();
   const login = useAuthStore((state)=>state.login);
+  const [error,setError] = useState(null);
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
@@ -17,17 +19,15 @@ export default function LoginPage() {
     axios
         .get('http://localhost:8080/api/v1/auth/csrf')
         .then((response) => {
-            console.log("api response",response);
             if (response.data) {
                 window.sessionStorage.setItem(response.config.xsrfCookieName, response.data);
                 axios.defaults.headers.common[response.config.xsrfHeaderName] = response.data;
 
                 useAuthStore.setState({csrfToken: response.data})
               }
-            console.log(response.data)
         })
-        .catch((error) => {
-            console.log(error);
+        .catch((err) => {
+            console.log(err);
             alert('Failed to fetch CSRF token');
         });
 }, []);
@@ -42,14 +42,25 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/auth/authenticate', credentials );
-      const { token} = response.data;
-      login(token,credentials.email);
-      console.log(token,login)
-      alert("로그인 되었습니다.");
-      router('/');
-    } catch (error) {
-      alert("이메일 및 비밀번호 오류")
+      const response = await axios.post('http://localhost:8080/api/v1/auth/authenticate', {
+        email:credentials.email,
+        password:credentials.password
+        
+      })
+       const authResponse=response.data;
+       if (authResponse.accepted){
+          localStorage.setItem('token',authResponse.token)
+          localStorage.setItem('email',credentials.email)
+          alert("로그인 되었습니다.")
+          router('/')
+          login(authResponse.token,credentials.email)
+       }
+       else{
+          setError('로그인을 실패하셨습니다.');
+       }
+    } catch (err) {
+      console.error('Error during login:',err)
+      setError('로그인 실패하였습니다. 비밀번호, 패스워드를 확인해주세요 ')
     }
   };
 
@@ -67,6 +78,7 @@ export default function LoginPage() {
       </div>
 
       <div tw="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
         <form onSubmit={handleSubmit} tw="space-y-6">
           <div>
             <label
@@ -111,7 +123,7 @@ export default function LoginPage() {
               </label>
             </div>
           </div>
-
+          {error &&<div tw='text-red-500'>{error}</div>}
           <div>
             <button
               type="submit"

@@ -9,20 +9,17 @@ import useAuthStore from '../../auth/authStore';
 function CreateRoom({setRoom}) {
     const [isVisible,setIsVisible]=useState(true);
     const [roomName, setRoomName] = useState('');
-    const [projectId,setProjectId] = useState('');
-    const {token} = useAuthStore();
+    const [currentRoom,setCurrentRoom] = useState({});
+    const {token, projectId} = useAuthStore();
     const handleRoomNameChange = (e) => {
         setRoomName(e.target.value);
     };
 
-    const handleProjectIdChange = (e) => {
-        setProjectId(e.target.value);
-    };
 
     const handleCreateRoom = async () => {
         try {
             const roomRequest = {
-                projectId : 'b08c8d68-bbc1-4e76-b6b7-90536c0cda7f',
+                projectId ,
                 roomName,
             };
             const response = await axios.post('http://localhost:8080/api/v1/chat/createroom', roomRequest,{
@@ -32,20 +29,24 @@ function CreateRoom({setRoom}) {
             });
             if (response.status === 200) {
                 console.log("Chat room created successfully:", response.data);
-                setRoomName(''); // Clear the input field
-                setProjectId('');
-                setRoom({
-                    projectId:"b08c8d68-bbc1-4e76-b6b7-90536c0cda7f",
+                setRoomName(''); 
+                const newRoom = ({
+                    projectId,
                     roomId: response.data.roomInfo.roomId,
                     roomName
                 })
+                setRoom(newRoom)
                 setIsVisible(false);
+                console.log("SetRoom:",setRoom.data)
+                setCurrentRoom(newRoom);
+                console.log("SetCurrentRoom:",setCurrentRoom)
+
             }
         } catch (error) {
             console.error("Failed to create a chat room:", error);
         }
     };
-
+    console.log(currentRoom)
     CreateRoom.propTypes = {
         setRoom:PropTypes.func.isRequired
     };
@@ -54,7 +55,6 @@ function CreateRoom({setRoom}) {
     return (
         <div>
             <div>
-                <input type="text" placeholder="projectId" value={projectId} onChange={handleProjectIdChange} />
                 <input type="text" placeholder="채팅방 이름 아무거나" value={roomName} onChange={handleRoomNameChange} />
                 <button type='button' onClick={handleCreateRoom}>방 만들기</button>
             </div>

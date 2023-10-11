@@ -1,12 +1,39 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro';
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router';
+
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
+
 export default function Forgot() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const router = useNavigate();
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [responseMessage, setResponseMessage] = useState('');
+  const handleResetPassword = async () => {
+      try {            
+        const response = await axios.post('http://localhost:8080/api/v1/auth/reset-password', {
+              email,
+              name,
+              newpassword: newPassword
+          });
+          const { token } = response.data;
+          if (response.data.accepted) {
+              setResponseMessage('비밀번호가 성공적으로 변경되었습니다.');
+              router('/login');
+          } else {
+              setResponseMessage(token); // "Not authenticated"
+          }
+        } catch (error) {
+            setResponseMessage('오류가 발생했습니다. 다시 시도해주세요.');
+        }
+        
+    };
   return (
     <div tw="bg-white">
       <header tw="absolute inset-x-0 top-0 z-50">
@@ -123,6 +150,7 @@ export default function Forgot() {
                       name="email"
                       type="email"
                       autoComplete="email"
+                      onChange={(e)=>setEmail(e.target.value)}
                       required
                       tw="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                     />
@@ -131,8 +159,51 @@ export default function Forgot() {
               </div>
 
               <div>
+                <label
+                  htmlFor="email"
+                  tw="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Name
+                  <div tw="mt-2">
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      placeholder='이름'
+                      autoComplete="name"
+                      onChange={(e)=>(setName(e.target.value))}
+                      required
+                      tw="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </label>
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  tw="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  password
+                  <div tw="mt-2">
+                    <input
+                      id="password"
+                      name="password"
+                      placeholder='새 비밀번호'
+                      type="password"
+                      value={newPassword}
+                      autoComplete="password"
+                      onChange={(e)=>setNewPassword(e.target.value)}
+                      required
+                      tw="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </label>
+                
+              </div>
+              <div>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleResetPassword}
                   tw="flex w-full justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
                 >
                   리셋하기
@@ -141,7 +212,7 @@ export default function Forgot() {
             </form>
           </div>
         </div>
-
+        {responseMessage && <p>{responseMessage}</p>}
         <div
           tw="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
           aria-hidden="true"
