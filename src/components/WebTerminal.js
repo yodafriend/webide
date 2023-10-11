@@ -120,7 +120,7 @@ function WebTerminal({ projectId }) {
     };
   }, []);
 
-  return <div ref={terminalRef} tw="h-64 bg-black text-white" />;
+  return <div ref={terminalRef} tw="h-80 bg-black text-white" />;
 }
 
 WebTerminal.propTypes = {

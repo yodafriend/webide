@@ -7,7 +7,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import useAuthStore from './auth/authStore';
 import { AuthProvider } from './auth/AuthContext';
 import axios from 'axios';
-import ProjectList from './component/ProjectList';
+import ProjectList from './components/ProjectList';
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

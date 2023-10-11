@@ -1,14 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro';
 import { useState, Fragment, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import useAuthStore from '../../auth/authStore';
-import WebTerminal from '../../component/WebTerminal';
+import WebTerminal from '../../components/WebTerminal';
+import ChatPage from '../../components/Chat';
 // import useAuthStore from '../../auth/authStore';
 
 const user = {
@@ -17,13 +18,7 @@ const user = {
   imageUrl:
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 };
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false },
-];
+
 const userNavigation = [
   { name: '프로필', href: '/profile' },
   { name: '로그아웃', href: '/#' },
@@ -33,6 +28,7 @@ export default function IdePage() {
   const { projectId } = useParams();
   const { token } = useAuthStore();
   const [isRunning, setIsRunning] = useState(false);
+  const { state } = useLocation();
 
   useEffect(() => {
     const startProject = async () => {
@@ -49,7 +45,6 @@ export default function IdePage() {
         if (response.data === 'ok') {
           setIsRunning(true);
         }
-        console.log('Success:', response.data); // 성공 시 응답 데이터를 콘솔에 출력합니다.
       } catch (error) {
         console.error('Error:', error); // 오류 발생 시 콘솔에 오류를 출력합니다.
         if (error.response) {
@@ -102,34 +97,6 @@ export default function IdePage() {
                     <a href="/">
                       <img tw="h-8 w-8" src="../logo.png" alt="Your Company" />
                     </a>
-                  </div>
-                  <div tw="hidden md:block">
-                    <div tw="ml-10 flex items-baseline space-x-4">
-                      {navigation.map((item) => {
-                        if (item.current) {
-                          return (
-                            <a
-                              key={item.name}
-                              href={item.href}
-                              tw="bg-sky-600 text-white rounded-md px-3 py-2 text-sm font-medium"
-                              aria-current={item.current ? 'page' : undefined}
-                            >
-                              {item.name}
-                            </a>
-                          );
-                        }
-                        return (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            tw="text-sky-300 hover:bg-sky-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                            aria-current={item.current ? 'page' : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        );
-                      })}
-                    </div>
                   </div>
                 </div>
                 <div tw="hidden md:block">
@@ -202,34 +169,7 @@ export default function IdePage() {
             </div>
 
             <Disclosure.Panel tw="md:hidden">
-              <div tw="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                {navigation.map((item) => {
-                  if (item.current) {
-                    return (
-                      <Disclosure.Button
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        tw="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
-                        aria-current={item.current ? 'page' : undefined}
-                      >
-                        {item.name}
-                      </Disclosure.Button>
-                    );
-                  }
-                  return (
-                    <Disclosure.Button
-                      key={item.name}
-                      as="a"
-                      href={item.href}
-                      tw="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Disclosure.Button>
-                  );
-                })}
-              </div>
+              <div tw="space-y-1 px-2 pb-3 pt-2 sm:px-3">dls</div>
               <div tw="border-t border-gray-700 pb-3 pt-4">
                 <div tw="flex items-center px-5">
                   <div tw="flex-shrink-0">
@@ -277,13 +217,16 @@ export default function IdePage() {
       <header tw="bg-white shadow">
         <div tw="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <h1 tw="text-3xl font-bold tracking-tight text-gray-900">
-            Dashboard
+            {state.projectName}
           </h1>
         </div>
       </header>
       <main>
         <div tw="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
           {isRunning && <WebTerminal projectId={projectId} />}
+        </div>
+        <div tw="mx-auto max-w-7xl py-6 my-8 sm:px-6 lg:px-8">
+          <ChatPage projectId={projectId} projectName={state.projectName} />
         </div>
       </main>
     </div>

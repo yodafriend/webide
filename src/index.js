@@ -12,7 +12,6 @@ import SignupPage from './pages/SignupPage';
 import Forgot from './pages/ResetPasswordPage';
 import ProtectedRoute from './Route/ProtectedRoute';
 import { AuthProvider } from './auth/AuthContext';
-import ChatPage from './pages/ChatPage/Chat';
 
 const router = createBrowserRouter([
   {
@@ -40,14 +39,6 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ProfilePage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/chat',
-    element: (
-      <ProtectedRoute>
-        <ChatPage />
       </ProtectedRoute>
     ),
   },

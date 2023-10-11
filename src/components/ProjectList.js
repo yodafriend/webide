@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useAuthStore from '../auth/authStore';
 
 function ProjectList() {
   const [projects, setProjects] = useState([]);
   const { token } = useAuthStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -18,10 +19,13 @@ function ProjectList() {
       })
       .then((response) => {
         setProjects(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         alert('Failed to fetch projects', error);
+        if (error.response.status === 401) {
+          alert('로그인이 필요합니다.');
+          navigate('/login');
+        }
       });
   }, []);
 
@@ -30,6 +34,7 @@ function ProjectList() {
       {projects.map((project) => (
         <Link
           to={`/ide/${project.projectId}`}
+          state={{ projectName: project.projectName }}
           key={project.projectId}
           tw="flex justify-center gap-x-7 py-5"
         >
