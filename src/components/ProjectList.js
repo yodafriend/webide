@@ -7,7 +7,7 @@ import useAuthStore from '../auth/authStore';
 
 function ProjectList() {
   const [projects, setProjects] = useState([]);
-  const { token } = useAuthStore();
+  const { token, logout } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +24,7 @@ function ProjectList() {
         alert('Failed to fetch projects', error);
         if (error.response.status === 401) {
           alert('로그인이 필요합니다.');
+          logout();
           navigate('/login');
         }
       });
