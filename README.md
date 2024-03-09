@@ -12,7 +12,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/yodafriend/webide/">
+  <a href="https://github.com/yodafriend/webide">
     <img src="public/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -21,14 +21,14 @@
   <p align="center">
     WEB에서 동작하는 이슬같이 깔끔한 IDE
     <br />
-    <a href="https://github.com/OurRealRoad/web-ide-frontend"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/yodafriend/webide"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/OurRealRoad/web-ide-frontend">View Demo</a>
+    <a href="https://github.com/yodafriend/webide">View Demo</a>
     ·
-    <a href="https://github.com/OurRealRoad/web-ide-frontend/issues">Report Bug</a>
+    <a href="https://github.com/yodafriend/webide/issues">Report Bug</a>
     ·
-    <a href="https://github.com/OurRealRoad/web-ide-frontend/issues">Request Feature</a>
+    <a href="https://github.com/yodafriend/webide/issues">Request Feature</a>
   </p>
 </div>
 <br/>
@@ -103,7 +103,7 @@
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/OurRealRoad/web-ide-frontend.git
+   git clone https://github.com/yodafriend/webide.git
    ```
 2. module 설치 및 husky 실행
    ```sh
@@ -124,7 +124,7 @@
 
 프로젝트 사용 방법을 보여줄 단락입니다.
 
-_For more examples, please refer to the [Documentation](https://github.com/OurRealRoad/web-ide-frontend)_
+_For more examples, please refer to the [Documentation](https://github.com/yodafriend/webide)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
